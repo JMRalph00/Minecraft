@@ -11,7 +11,7 @@ public class BlockMoonRock extends Block
 		super(id, material);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setUnlocalizedName("MoonRock");
-		this.setTextureName("spacecraft:moonRock");
+		this.setTextureName("spacecrafttexture:moonRock");
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 	}

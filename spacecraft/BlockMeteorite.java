@@ -11,7 +11,7 @@ public class BlockMeteorite extends Block
 		super(id, material);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setUnlocalizedName("Meteorite");
-		this.setTextureName("spacecraft:meteorite");
+		this.setTextureName("spacecraftTexture:meteorite");
 		this.setHardness(30.0F);
 		this.setResistance(1000.0F);
 	}

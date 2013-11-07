@@ -63,20 +63,6 @@ public class ChunkProviderMoon implements IChunkProvider
     /** Holds the overall noise array used in chunk generation */
     private double[] noiseArray;
     private double[] stoneNoise = new double[256];
-    private MapGenBase caveGenerator = new MapGenCaves();
-
-    /** Holds Stronghold Generator */
-    private MapGenStronghold strongholdGenerator = new MapGenStronghold();
-
-    /** Holds Village Generator */
-    private MapGenVillage villageGenerator = new MapGenVillage();
-
-    /** Holds Mineshaft Generator */
-    private MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
-    private MapGenScatteredFeature scatteredFeatureGenerator = new MapGenScatteredFeature();
-
-    /** Holds ravine generator */
-    private MapGenBase ravineGenerator = new MapGenRavine();
 
     /** The biomes that are used to generate the chunk */
     private BiomeGenBase[] biomesForGeneration;
@@ -102,14 +88,6 @@ public class ChunkProviderMoon implements IChunkProvider
     float[] parabolicField;
     int[][] field_73219_j = new int[32][32];
 
-    {
-        caveGenerator = TerrainGen.getModdedMapGen(caveGenerator, CAVE);
-        strongholdGenerator = (MapGenStronghold) TerrainGen.getModdedMapGen(strongholdGenerator, STRONGHOLD);
-        villageGenerator = (MapGenVillage) TerrainGen.getModdedMapGen(villageGenerator, VILLAGE);
-        mineshaftGenerator = (MapGenMineshaft) TerrainGen.getModdedMapGen(mineshaftGenerator, MINESHAFT);
-        scatteredFeatureGenerator = (MapGenScatteredFeature) TerrainGen.getModdedMapGen(scatteredFeatureGenerator, SCATTERED_FEATURE);
-        ravineGenerator = TerrainGen.getModdedMapGen(ravineGenerator, RAVINE);
-    }
 
     public ChunkProviderMoon(World par1World, long par2, boolean par4)
     {
@@ -187,12 +165,9 @@ public class ChunkProviderMoon implements IChunkProvider
                             {
                                 if ((d16 += d15) > 0.0D)
                                 {
-                                    par3ArrayOfByte[j2 += short1] = (byte)Block.stone.blockID;
+                                    par3ArrayOfByte[j2 += short1] = (byte)Spacecraft.moonRock.blockID;
                                 }
-                                else if (k1 * 8 + l1 < b2)
-                                {
-                                    par3ArrayOfByte[j2 += short1] = (byte)Block.waterStill.blockID;
-                                }
+                               
                                 else
                                 {
                                     par3ArrayOfByte[j2 += short1] = 0;
@@ -253,32 +228,17 @@ public class ChunkProviderMoon implements IChunkProvider
                         {
                             j1 = -1;
                         }
-                        else if (b3 == Block.stone.blockID)
+                        else if (b3 == Spacecraft.moonRock.blockID)
                         {
                             if (j1 == -1)
                             {
-                                if (i1 <= 0)
-                                {
-                                    b1 = 0;
-                                    b2 = (byte)Block.stone.blockID;
-                                }
-                                else if (k1 >= b0 - 4 && k1 <= b0 + 1)
+                                
+                                if (k1 >= b0 - 4 && k1 <= b0 + 1)
                                 {
                                     b1 = biomegenbase.topBlock;
                                     b2 = biomegenbase.fillerBlock;
                                 }
 
-                                if (k1 < b0 && b1 == 0)
-                                {
-                                    if (f < 0.15F)
-                                    {
-                                        b1 = (byte)Block.ice.blockID;
-                                    }
-                                    else
-                                    {
-                                        b1 = (byte)Block.waterStill.blockID;
-                                    }
-                                }
 
                                 j1 = i1;
 
@@ -295,12 +255,6 @@ public class ChunkProviderMoon implements IChunkProvider
                             {
                                 --j1;
                                 par3ArrayOfByte[l1] = b2;
-
-                                if (j1 == 0 && b2 == Block.sand.blockID)
-                                {
-                                    j1 = this.rand.nextInt(4);
-                                    b2 = (byte)Block.sandStone.blockID;
-                                }
                             }
                         }
                     }
@@ -328,16 +282,7 @@ public class ChunkProviderMoon implements IChunkProvider
         this.generateTerrain(par1, par2, abyte);
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, par1 * 16, par2 * 16, 16, 16);
         this.replaceBlocksForBiome(par1, par2, abyte, this.biomesForGeneration);
-        this.caveGenerator.generate(this, this.worldObj, par1, par2, abyte);
-        this.ravineGenerator.generate(this, this.worldObj, par1, par2, abyte);
 
-        if (this.mapFeaturesEnabled)
-        {
-            this.mineshaftGenerator.generate(this, this.worldObj, par1, par2, abyte);
-            this.villageGenerator.generate(this, this.worldObj, par1, par2, abyte);
-            this.strongholdGenerator.generate(this, this.worldObj, par1, par2, abyte);
-            this.scatteredFeatureGenerator.generate(this, this.worldObj, par1, par2, abyte);
-        }
 
         Chunk chunk = new Chunk(this.worldObj, abyte, par1, par2);
         byte[] abyte1 = chunk.getBiomeArray();
@@ -531,72 +476,17 @@ public class ChunkProviderMoon implements IChunkProvider
 
         MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(par1IChunkProvider, worldObj, rand, par2, par3, flag));
 
-        if (this.mapFeaturesEnabled)
-        {
-            this.mineshaftGenerator.generateStructuresInChunk(this.worldObj, this.rand, par2, par3);
-            flag = this.villageGenerator.generateStructuresInChunk(this.worldObj, this.rand, par2, par3);
-            this.strongholdGenerator.generateStructuresInChunk(this.worldObj, this.rand, par2, par3);
-            this.scatteredFeatureGenerator.generateStructuresInChunk(this.worldObj, this.rand, par2, par3);
-        }
 
         int k1;
         int l1;
         int i2;
 
-        if (biomegenbase != BiomeGenBase.desert && biomegenbase != BiomeGenBase.desertHills && !flag && this.rand.nextInt(4) == 0
-            && TerrainGen.populate(par1IChunkProvider, worldObj, rand, par2, par3, flag, LAKE))
-        {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(128);
-            i2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenLakes(Block.waterStill.blockID)).generate(this.worldObj, this.rand, k1, l1, i2);
-        }
-
-        if (TerrainGen.populate(par1IChunkProvider, worldObj, rand, par2, par3, flag, LAVA) &&
-                !flag && this.rand.nextInt(8) == 0)
-        {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(this.rand.nextInt(120) + 8);
-            i2 = l + this.rand.nextInt(16) + 8;
-
-            if (l1 < 63 || this.rand.nextInt(10) == 0)
-            {
-                (new WorldGenLakes(Block.lavaStill.blockID)).generate(this.worldObj, this.rand, k1, l1, i2);
-            }
-        }
-
-        boolean doGen = TerrainGen.populate(par1IChunkProvider, worldObj, rand, par2, par3, flag, DUNGEON);
-        for (k1 = 0; doGen && k1 < 8; ++k1)
-        {
-            l1 = k + this.rand.nextInt(16) + 8;
-            i2 = this.rand.nextInt(128);
-            int j2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenDungeons()).generate(this.worldObj, this.rand, l1, i2, j2);
-        }
+       
 
         biomegenbase.decorate(this.worldObj, this.rand, k, l);
         SpawnerAnimals.performWorldGenSpawning(this.worldObj, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
         k += 8;
         l += 8;
-
-        doGen = TerrainGen.populate(par1IChunkProvider, worldObj, rand, par2, par3, flag, ICE);
-        for (k1 = 0; doGen && k1 < 16; ++k1)
-        {
-            for (l1 = 0; l1 < 16; ++l1)
-            {
-                i2 = this.worldObj.getPrecipitationHeight(k + k1, l + l1);
-
-                if (this.worldObj.isBlockFreezable(k1 + k, i2 - 1, l1 + l))
-                {
-                    this.worldObj.setBlock(k1 + k, i2 - 1, l1 + l, Block.ice.blockID, 0, 2);
-                }
-
-                if (this.worldObj.canSnowAt(k1 + k, i2, l1 + l))
-                {
-                    this.worldObj.setBlock(k1 + k, i2, l1 + l, Block.snow.blockID, 0, 2);
-                }
-            }
-        }
 
         MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(par1IChunkProvider, worldObj, rand, par2, par3, flag));
 
@@ -648,7 +538,7 @@ public class ChunkProviderMoon implements IChunkProvider
     public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
     {
         BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(par2, par4);
-        return biomegenbase == null ? null : (par1EnumCreatureType == EnumCreatureType.monster && this.scatteredFeatureGenerator.func_143030_a(par2, par3, par4) ? this.scatteredFeatureGenerator.getScatteredFeatureSpawnList() : biomegenbase.getSpawnableList(par1EnumCreatureType));
+        return null;
     }
 
     /**
@@ -656,7 +546,7 @@ public class ChunkProviderMoon implements IChunkProvider
      */
     public ChunkPosition findClosestStructure(World par1World, String par2Str, int par3, int par4, int par5)
     {
-        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.getNearestInstance(par1World, par3, par4, par5) : null;
+        return null;
     }
 
     public int getLoadedChunkCount()
@@ -668,10 +558,7 @@ public class ChunkProviderMoon implements IChunkProvider
     {
         if (this.mapFeaturesEnabled)
         {
-            this.mineshaftGenerator.generate(this, this.worldObj, par1, par2, (byte[])null);
-            this.villageGenerator.generate(this, this.worldObj, par1, par2, (byte[])null);
-            this.strongholdGenerator.generate(this, this.worldObj, par1, par2, (byte[])null);
-            this.scatteredFeatureGenerator.generate(this, this.worldObj, par1, par2, (byte[])null);
+            
         }
     }
 }

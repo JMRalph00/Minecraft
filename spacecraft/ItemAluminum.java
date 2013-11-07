@@ -10,6 +10,6 @@ public class ItemAluminum extends Item
 		super(id);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setUnlocalizedName("aluminum");
-		this.setTextureName("spacecraft:aluminumIngot");
+		this.setTextureName("spacecraftTexture:aluminumIngot");
 	}
 }

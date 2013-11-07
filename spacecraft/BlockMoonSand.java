@@ -11,7 +11,7 @@ public class BlockMoonSand extends Block
 		super(id, material);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setUnlocalizedName("MoonSand");
-		this.setTextureName("spacecraft:moonSand");
+		this.setTextureName("spacecraftTexture:moonDust");
 		this.setHardness(0.5F);
 	}
 }

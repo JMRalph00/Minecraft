@@ -14,7 +14,7 @@ public class BlockBauxite extends Block
 		super(id, material);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setUnlocalizedName("aluminumOre");
-		this.setTextureName("spacecraft:aluminumOre");
+		this.setTextureName("spacecrafttexture:aluminumOre");
 		this.setHardness(3.0F);
 		this.setResistance(4.0F);
 	}

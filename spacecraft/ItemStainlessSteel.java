@@ -10,7 +10,7 @@ public class ItemStainlessSteel extends Item
 		super(id);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setUnlocalizedName("Steel");
-		this.setTextureName("spacecraft:steel");
+		this.setTextureName("spacecraftTexture:stainlessSteel");
 	}
 
 }

@@ -14,6 +14,7 @@ public class ItemSteelRod extends Item
 		super(id);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setUnlocalizedName("SteelRod");
+		this.setTextureName("spacecraftTexture:steelRod");
 	}
 
 	

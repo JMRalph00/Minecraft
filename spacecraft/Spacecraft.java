@@ -29,23 +29,23 @@ public class Spacecraft
 	@Instance("Spacecraft")
     public static Spacecraft instance;
 	
-	public static int DimensionId = 8;
+	public static int DimensionId =2;
 	
 	// Blocks
-	public static Block bauxite = new BlockBauxite(500, Material.rock);
-	public static Block moonSand = new BlockMoonSand(501, Material.sand);
-	public static Block meteorite = new BlockMeteorite(502, Material.rock);
-	public static Block moonRock = new BlockMoonRock(504, Material.rock);
+	public static Block bauxite = new BlockBauxite(175, Material.rock);
+	public static Block moonDust = new BlockMoonSand(176, Material.sand);
+	public static Block meteorite = new BlockMeteorite(177, Material.rock);
+	public static Block moonRock = new BlockMoonRock(178, Material.rock);
 	
 	// Portal Blocks
-	public static Block moonPortal = new BlockMoonPortal(503);
+	public static Block moonPortal = new BlockMoonPortal(179);
 	
 	//Items
 	public static Item aluminum = new ItemAluminum(1000);
 	public static Item stainlessSteel = new ItemStainlessSteel(1001);
 	public static Item steelRod = new ItemSteelRod(1002);
 	
-	public static BiomeGenBase moon = (new BiomeGenMoon(30).setColor(9386496).setBiomeName("Moon").setTemperatureRainfall(0.0F, 0.0F));
+	public static BiomeGenBase moon = (new BiomeGenMoon(30).setColor(9386496).setBiomeName("Moon").setTemperatureRainfall(1.0F, 0.0F));
 	
 	@SidedProxy(clientSide = "spacecraft.ClientProxy", serverSide = "spacecraft.CommonProxy")
     public static CommonProxy proxy;
@@ -65,14 +65,14 @@ public class Spacecraft
 		
 		//Block Registration
 		GameRegistry.registerBlock(bauxite);
-		GameRegistry.registerBlock(moonSand);
+		GameRegistry.registerBlock(moonDust);
 		GameRegistry.registerBlock(meteorite);
 		GameRegistry.registerBlock(moonPortal);
 		GameRegistry.registerBlock(moonRock);
 		
 		//Block Name Registration
 		LanguageRegistry.addName(bauxite, "Bauxite");
-		LanguageRegistry.addName(moonSand, "Moon Sand");
+		LanguageRegistry.addName(moonDust, "Moon Dust");
 		LanguageRegistry.addName(meteorite, "Meteorite");
 		LanguageRegistry.addName(moonPortal, "Moon Portal");
 		LanguageRegistry.addName(moonRock, "Moon Rock");
